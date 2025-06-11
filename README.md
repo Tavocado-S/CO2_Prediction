@@ -1,7 +1,7 @@
 Project Name
 ==============================
 
-This repo is a Starting Pack for DS projects. You can rearrange the structure to make it fits your project.
+May25_Bds_CO2
 
 Project Organization
 ------------
