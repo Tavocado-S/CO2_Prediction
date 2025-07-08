@@ -166,3 +166,6 @@ cython_debug/
 data/
 !data/raw/
 !data/raw/*.csv
+
+#DS_Store MacOS specific file
+.DS_Store
