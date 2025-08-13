@@ -207,36 +207,37 @@ elif section == "4. Model":
     st.success("Best model: Random Forest, with RMSE ≈ 11.33 and R² ≈ 0.94 on test set.")
 
     # === Section: Feature Importance & SHAP Values ===
-    st.subheader("Feature Importance & SHAP Values Analysis")
 
-    # Load model and test data
-    model_rf = joblib.load("models/best_model_Random_Forest.pkl")
-    X_test = joblib.load("../data/X_test.pkl") 
+    from PIL import Image
+    import os
 
-    # Compute SHAP values
-    explainer = shap.TreeExplainer(model_rf)
-    shap_values = explainer.shap_values(X_test)
+    st.header("Feature Importance & SHAP Values Analysis")
 
-    # --- SHAP Bar Plot (Feature Importance) ---
-    st.markdown("**Feature Importance (Average Impact)**")
-    fig1, ax1 = plt.subplots(figsize=(8, 5))
-    shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
-    st.pyplot(fig1)
+    # Define base directory relative to streamlit_app.py
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    # --- SHAP Beeswarm Plot (Feature Impact & Direction) ---
-    st.markdown("**Detailed Feature Impact (Beeswarm Plot)**")
-    fig2, ax2 = plt.subplots(figsize=(8, 5))
-    shap.summary_plot(shap_values, X_test, show=False)
-    st.pyplot(fig2)
+    # Paths to saved plots
+    bar_plot_path = os.path.join(BASE_DIR, "plots/shap_summary_bar.png")
+    detailed_plot_path = os.path.join(BASE_DIR, "plots/shap_summary_detailed.png")
 
-    # Interpretation
+    # Display Feature Importance (Bar Plot)
+    st.subheader("Feature Importance (Bar Plot)")
+    bar_img = Image.open(bar_plot_path)
+    st.image(bar_img, use_container_width=True)
+
+    # Display SHAP Summary (Detailed Beeswarm)
+    st.subheader("SHAP Summary (Detailed)")
+    detailed_img = Image.open(detailed_plot_path)
+    st.image(detailed_img, use_container_width=True)
+
+    # Interpretation text
     st.markdown("""
     **Interpretation:**  
-    The SHAP summary plots confirm that vehicle **mass** is by far the most influential feature in predicting CO₂ emissions, with a significantly higher average impact than all other inputs.  
-    **Engine power** and **fuel type** also contribute meaningfully, while **engine capacity** has a more moderate influence overall.  
+    The SHAP summary plots confirm that vehicle mass is by far the most influential feature in predicting CO₂ emissions, with a significantly higher average impact than all other inputs. Engine power and fuel type also contribute meaningfully, while engine capacity has a more moderate influence overall.  
 
     The color-coded beeswarm plot shows that higher values for mass and engine power strongly increase predicted emissions, whereas petrol fuel type typically lowers them compared to diesel.
     """)
+
 
 
 # === Section 5: Prediction ===
