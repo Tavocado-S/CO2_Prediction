@@ -115,6 +115,8 @@ elif section == "3. Features Selection":
 # === Section 4: Model ===
 elif section == "4. Model":
     import matplotlib.pyplot as plt
+    from PIL import Image
+    import os
 
     st.title("Modeling")
     
@@ -190,54 +192,67 @@ elif section == "4. Model":
         plt.tight_layout()
         return fig
 
+
     # === Always visible: R² Score ===
     st.subheader("Model Comparisons & Results")
-    st.pyplot(plot_metric("R² Score"))
+
+    from io import BytesIO
+
+    MAX_WIDTH = 800  # max width for all images
+
+    def st_plot(fig):
+        buf = BytesIO()
+        fig.savefig(buf, format="png", bbox_inches='tight')
+        buf.seek(0)
+        st.image(buf, use_container_width=False, width=MAX_WIDTH)
+        plt.close(fig)
+
+    st_plot(plot_metric("R² Score"))
 
     # === Collapsible sections for other metrics ===
     with st.expander("Show MSE Comparison"):
-        st.pyplot(plot_metric("MSE"))
+        st_plot(plot_metric("MSE"))
 
     with st.expander("Show MAE Comparison"):
-        st.pyplot(plot_metric("MAE"))
+        st_plot(plot_metric("MAE"))
 
     with st.expander("Show RMSE Comparison"):
-        st.pyplot(plot_metric("RMSE"))
+        st_plot(plot_metric("RMSE"))
+
 
     st.success("Best model: Random Forest, with RMSE ≈ 11.33 and R² ≈ 0.94 on test set.")
 
     # === Section: Feature Importance & SHAP Values ===
-
-    from PIL import Image
-    import os
-
     st.header("Feature Importance & SHAP Values Analysis")
 
-    # Define base directory relative to streamlit_app.py
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    # Paths to saved plots
-    bar_plot_path = os.path.join(BASE_DIR, "plots/shap_summary_bar.png")
-    detailed_plot_path = os.path.join(BASE_DIR, "plots/shap_summary_detailed.png")
+    bar_plot_path = os.path.join(BASE_DIR, "plots", "shap_summary_bar.png")
+    detailed_plot_path = os.path.join(BASE_DIR, "plots", "shap_summary_detailed.png")
 
-    # Display Feature Importance (Bar Plot)
-    st.subheader("Feature Importance (Bar Plot)")
-    bar_img = Image.open(bar_plot_path)
-    st.image(bar_img, use_container_width=True)
+    # Display images with max width to prevent oversized display
+    MAX_WIDTH = 800
 
-    # Display SHAP Summary (Detailed Beeswarm)
-    st.subheader("SHAP Summary (Detailed)")
-    detailed_img = Image.open(detailed_plot_path)
-    st.image(detailed_img, use_container_width=True)
+    if os.path.exists(bar_plot_path):
+        st.subheader("Feature Importance (Bar Plot)")
+        bar_img = Image.open(bar_plot_path)
+        st.image(bar_img, use_container_width=False, width=MAX_WIDTH)
+    else:
+        st.error(f"Bar plot not found at {bar_plot_path}")
 
-    # Interpretation text
+    if os.path.exists(detailed_plot_path):
+        st.subheader("SHAP Summary (Detailed)")
+        detailed_img = Image.open(detailed_plot_path)
+        st.image(detailed_img, use_container_width=False, width=MAX_WIDTH)
+    else:
+        st.error(f"Detailed SHAP plot not found at {detailed_plot_path}")
+
     st.markdown("""
     **Interpretation:**  
     The SHAP summary plots confirm that vehicle mass is by far the most influential feature in predicting CO₂ emissions, with a significantly higher average impact than all other inputs. Engine power and fuel type also contribute meaningfully, while engine capacity has a more moderate influence overall.  
 
     The color-coded beeswarm plot shows that higher values for mass and engine power strongly increase predicted emissions, whereas petrol fuel type typically lowers them compared to diesel.
     """)
-
 
 
 # === Section 5: Prediction ===
