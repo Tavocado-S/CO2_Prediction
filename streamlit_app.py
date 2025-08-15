@@ -13,7 +13,7 @@ section = st.sidebar.radio("Go to", [
     "1. Project Introduction",
     "2. Data Overview",
     "3. Features Selection",
-    "4. Model",
+    "4. Model Exploration",
     "5. Prediction"
 ])
 
@@ -113,7 +113,7 @@ elif section == "3. Features Selection":
     st.info("Correlation analysis and distribution plots were used to assess predictive power.")
 
 # === Section 4: Model ===
-elif section == "4. Model":
+elif section == "4. Model Exploration":
     import matplotlib.pyplot as plt
     from PIL import Image
     import os
@@ -234,14 +234,14 @@ elif section == "4. Model":
     MAX_WIDTH = 800
 
     if os.path.exists(bar_plot_path):
-        st.subheader("Feature Importance (Bar Plot)")
+        st.subheader("Feature Importance")
         bar_img = Image.open(bar_plot_path)
         st.image(bar_img, use_container_width=False, width=MAX_WIDTH)
     else:
         st.error(f"Bar plot not found at {bar_plot_path}")
 
     if os.path.exists(detailed_plot_path):
-        st.subheader("SHAP Summary (Detailed)")
+        st.subheader("SHAP Values")
         detailed_img = Image.open(detailed_plot_path)
         st.image(detailed_img, use_container_width=False, width=MAX_WIDTH)
     else:
@@ -251,7 +251,6 @@ elif section == "4. Model":
     **Interpretation:**  
     The SHAP summary plots confirm that vehicle mass is by far the most influential feature in predicting CO₂ emissions, with a significantly higher average impact than all other inputs. Engine power and fuel type also contribute meaningfully, while engine capacity has a more moderate influence overall.  
 
-    The color-coded beeswarm plot shows that higher values for mass and engine power strongly increase predicted emissions, whereas petrol fuel type typically lowers them compared to diesel.
     """)
 
 
@@ -274,10 +273,21 @@ elif section == "5. Prediction":
         st.session_state.other_preds = None
 
     # Feature inputs
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stSlider"] {
+            max-width: 500px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    
     st.header("Vehicle Features")
 
-    mass = st.number_input("Mass in Running Order (kg)", min_value=200, max_value=5000, value=1500)
-    engine_capacity = st.number_input("Engine Capacity (cm³)", min_value=500, max_value=8000, value=1600)
+    mass = st.slider("Mass in Running Order (kg)", min_value=200, max_value=5000, value=1500)
+    engine_capacity = st.slider("Engine Capacity (cm³)", min_value=500, max_value=8000, value=1600)
     engine_power = st.slider("Engine Power (kW)", min_value=20, max_value=1200, value=85)
     fuel_type = st.radio("Fuel Type", ["Petrol", "Diesel"])
     fuel_type_petrol = 1 if fuel_type == "Petrol" else 0
