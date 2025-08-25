@@ -12,8 +12,8 @@ st.sidebar.title("Navigation")
 section = st.sidebar.radio("Go to", [
     "1. Project Introduction",
     "2. Data Overview",
-    "3. Features Selection",
-    "4. Model Exploration",
+    "3. Feature Engineering",
+    "4. Models Exploration",
     "5. Prediction"
 ])
 
@@ -40,15 +40,57 @@ def set_background(image_path):
     """
     st.markdown(css, unsafe_allow_html=True)
 
+
+# Hero function definition to set the background
+def hero(image_path, title_text):
+    import base64, pathlib
+    encoded = base64.b64encode(pathlib.Path(image_path).read_bytes()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .hero {{
+          position: relative;
+          min-height: 220px;
+          border-radius: 16px;
+          overflow: hidden;
+          margin-bottom: 25px;
+          display: flex;              /* enable flexbox */
+          align-items: center;        /* vertical center */
+          justify-content: center;    /* horizontal center */
+          text-align: center;         /* text center for multiline */
+        }}
+        .hero::before {{
+          content: "";
+          position: absolute;
+          inset: 0;
+          background-image: url("data:image/jpg;base64,{encoded}");
+          background-size: cover;
+          background-position: center;
+          filter: brightness(0.55);
+        }}
+        .hero-content {{
+          position: relative;
+          z-index: 1;
+          color: white;
+          font-size: 60px;          /* bigger text */
+          font-weight: 800;         /* extra bold */
+          padding: 0 20px;
+        }}
+        </style>
+        <div class="hero">
+          <div class="hero-content">{title_text}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
 # === Section 1: Project Introduction ===
 if section == "1. Project Introduction":
-    set_background("streamlit_support/foto1.jpg")
+    hero("images/contamination.webp", "Introduction")
 
     st.markdown('<div class="section"><div class="overlay">', unsafe_allow_html=True)
 
-    st.title("Project Introduction, Context and Objective")
-
-    st.markdown("### Introduction")
+    st.markdown("### Motivation")
     st.write("""
     The transportation sector is a major contributor to greenhouse gas emissions worldwide.
     Passenger cars, in particular, release significant amounts of CO₂.
@@ -73,17 +115,21 @@ if section == "1. Project Introduction":
 
 # === Section 2: Data Overview ===
 elif section == "2. Data Overview":
-    st.title("Dataset Overview")
-
-    st.subheader("🇫🇷 France 2013 Dataset")
+    hero("images/contamination.webp", "Data Overview")
+    
+    st.subheader("France 2013 Dataset")
     st.write("""
     Used for initial exploration. Contains historical vehicle registration data for France.
     Less complete and consistent than the EEA 2023 dataset.
     """)
 
-    st.subheader("🇪🇺 EEA 2023 Dataset")
+    st.subheader("EEA 2023 Dataset")
     st.write("""
-    Main dataset for this project. Includes:
+    This data set offers 
+    - Modern Data Base and car characteristics
+    - Measures are after “Dieselgate” scandal, based on standarized WLTP
+    
+    The car characteristics at disposal in the data base includes:
     - Vehicle mass (kg)
     - Engine capacity (cm3)
     - Engine power (KW)
@@ -91,43 +137,72 @@ elif section == "2. Data Overview":
     - Fuel mode (ICE, PHEV, etc.)
     - CO₂ emissions under WLTP standard
     - Country and manufacturer
+    """)
+    
+    st.subheader("Exploration of Target variable and car characteristics")
+    st.write(""" This first explorations gave us some clues. We concluded with statistical tests, that the numerical characteristics mentioned above have a positive correlation and have a significant relationship to CO2. The categorical values also have a significant relationship with CO2. 
+    """)
+    st.image("images/first_explo.png", caption="Traffic pollution", use_container_width=True)
 
-    The data was cleaned, translated, and filtered to focus on ICE vehicles.
+
+
+# === Section 3: Features Engineering ===
+elif section == "3. Feature Engineering":
+    hero("images/contamination.webp", "Feature Engineering")
+    st.markdown("""
+    ## Characteristics Selection
+    - Deleting non-essential identification features (maker, registration date, approval number, etc.)
+    - Removing columns with too many missing values
+    - Handling multicolinearities:
+    - Fuel consumption vs CO₂
+    - Mass vs Mass in running order
+    """)
+    
+
+    st.markdown("""
+    ## Filtering rows
+    - Filtering Internal Combustion Cars
+    - deleting zeros and outliers
+    - GETTING UNIQUE CARS
+
+    How did we get UNIQUE CARS?
+    first we explored the variation (with Coefficient of Variation) of Mass, Engine Power, Engine Capacity and CO2 Emissions within Type - Variant - Version groups. If the there is a variation within the groups, the characteristic is used as subset in our drop duplicates code.
+    - Mass and CO2 Emissions varied within the groups
+    - Engine Capacity and Power did not varied.
+
+    
+    
     """)
 
-# === Section 3: Features Selection ===
-elif section == "3. Features Selection":
-    st.title("Feature Selection")
+    st.image("images/Unique_cars_ilustration.png", caption="Traffic pollution", use_container_width=True)
 
-    st.write("""
-    Several steps were taken to select relevant features for modeling:
-    - Removed columns with >30% missing values or low interpretability
-    - Excluded highly correlated columns (e.g. fuel consumption & mass)
-    - Focused on measurable, interpretable technical variables:
-        - Mass
-        - Engine power
-        - Engine capacity
-        - Fuel type
+    st.markdown("""Our drop duplicates code to find unique cars then was:
+
+    ```python
+        df_unique = df_a.drop_duplicates(subset=
+    ['Version', 'Variant', 'Type','CO2_Emissions_WLTP(g/km)',
+    'Mass_in_Running_Order(kg)','Fuel_Type'])
     """)
 
-    st.info("Correlation analysis and distribution plots were used to assess predictive power.")
+
+
+
 
 # === Section 4: Model ===
-elif section == "4. Model Exploration":
+elif section == "4. Models Exploration":
+    hero("images/contamination.webp", "Models Exploration")
     import matplotlib.pyplot as plt
     from PIL import Image
     import os
-
-    st.title("Modeling")
     
-    st.subheader("Model Types")
+    st.subheader("Tested Models")
     st.write("""
     Various machine learning models were tested to predict CO₂ emissions:
     - Linear Regression
     - Lasso Model
     - Random Forest
     - XGBoost
-    - Deeplearning Neural Network
+    - Deep Learning Neural Network
              
     Then we optimized our models (Lasso, Random Forest, XGBoost) with hyperparameter tuning.
     
@@ -256,6 +331,8 @@ elif section == "4. Model Exploration":
 
 # === Section 5: Prediction ===
 elif section == "5. Prediction":
+    hero("images/contamination.webp", "Prediction")
+
     # Load models and scalers
     model_rf = joblib.load("models/best_model_Random_Forest.pkl")
     model_lin = joblib.load("models/linear_regression_model.pkl")
