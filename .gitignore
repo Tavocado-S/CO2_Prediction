@@ -169,3 +169,21 @@ data/
 
 #DS_Store MacOS specific file
 .DS_Store
+
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+
+# Project-specific large / generated stuff
+myenv/
+models/
+reports/
+plots/
+*.pkl
+*.joblib
+
+# Java / tools
+*.jar
+
+# OS clutter
+Thumbs.db
