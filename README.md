@@ -16,7 +16,7 @@ CO₂ emissions from passenger vehicles are a major climate driver. This project
 
 ## My Contribution
 
-This project was developed as part of my DataScientest Machine Learning Engineering training.
+This project was completed in a team setting as part of the DataScientest Data Scientist training.
 
 My contribution included:
 - data cleaning and preprocessing
