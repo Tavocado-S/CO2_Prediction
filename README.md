@@ -14,6 +14,18 @@ CO₂ emissions from passenger vehicles are a major climate driver. This project
 - Train regression models to predict CO₂ emissions under the WLTP standard.
 - Provide a reproducible pipeline for training and evaluation.
 
+## My Contribution
+
+This project was developed as part of my DataScientest Machine Learning Engineering training.
+
+My contribution included:
+- data cleaning and preprocessing
+- exploratory data analysis and feature engineering
+- training and evaluation of linear andn tree-based ensemble models.
+- comparison of model performance using RMSE, MAE, and R²
+- interpretation of model outputs to identify the key drivers of CO₂ emissions
+- preparation of a reproducible workflow for analysis and modeling
+
 ### Data
 - The raw datasets used in this project are not included in the repository due to size constraints.
 
