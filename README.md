@@ -64,7 +64,7 @@ My contribution included:
     - outlier handling and target-variable relationship analysis
     - final cleaned dataset export for modeling
 
-  - `Exploration_EEA2023.ipynb` - — End-to-end modeling and evaluation notebook:
+  - `Model.ipynb` - — End-to-end modeling and evaluation notebook:
     - correlation analysis and feature relationships
     - preprocessing: categorical encoding (one-hot / dummies)
     - trained and evaluated multiple regression models:
