@@ -45,7 +45,7 @@ My contribution included:
 ### Results (Test Set)
 | Model | R² | RMSE (g/km) |
 |------|---:|------------:|
-| Baseline (mean prediction) | 0.00 | 140.17 |
+| Baseline (mean prediction) | 0.00 | 44.42 | Baseline: predicts the training-set mean for every car.
 | Linear Regression | 0.82 | 19.32 |
 | Random Forest Regressor | 0.94 | 11.33 |
 | XGBoost Regressor (best) | 0.93 | 12.04 |
