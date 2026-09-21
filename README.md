@@ -3,7 +3,7 @@
 
 ### TL;DR
 Identify the key factors on CO₂, as well as predict vehicle CO₂ emissions (g/km) from technical specifications using EU vehicle characteristics data.
-Models: Linear Regression, Random Forest, XG Boos. Best model: Random Forest with [RMSE= 11.33/ MAE= 5.05/ R²= 0.94 ].
+Models: Linear Regression, Random Forest, XGBoost. Best model: Random Forest with [RMSE= 11.33/ MAE= 5.05/ R²= 0.94 ].
 Key factors: first with difference mass, then engine power and fuel type are in second with almost the same influence on CO₂.
 
 ### Problem
@@ -21,7 +21,7 @@ This project was completed in a team setting as part of the DataScientest Data S
 My contribution included:
 - data cleaning and preprocessing
 - exploratory data analysis and feature engineering
-- training and evaluation of linear andn tree-based ensemble models.
+- training and evaluation of linear and tree-based ensemble models.
 - comparison of model performance using RMSE, MAE, and R²
 - interpretation of model outputs to identify the key drivers of CO₂ emissions
 - preparation of a reproducible workflow for analysis and modeling
@@ -32,23 +32,28 @@ My contribution included:
 - Required files:
   - `data/raw/data_2023.csv`
 
-  - download them from: https://co2cars.apps.eea.europa.eu/?source=%7B%22track_total_hits%22%3Atrue%2C%22query%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22constant_score%22%3A%7B%22filter%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22bool%22%3A%7B%22should%22%3A%5B%7B%22term%22%3A%7B%22year%22%3A2024%7D%7D%5D%7D%7D%2C%7B%22bool%22%3A%7B%22should%22%3A%5B%7B%22term%22%3A%7B%22scStatus%22%3A%22Provisional%22%7D%7D%5D%7D%7D%5D%7D%7D%7D%7D%5D%7D%7D%2C%22display_type%22%3A%22tabular%22%7D
+  - download them from: https://co2cars.apps.eea.europa.eu/?source=%7B%22track_total_hits%22%3Atrue%2C%22query%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22constant_score%22%3A%7B%22filter%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22bool%22%3A%7B%22should%22%3A%5B%7B%22term%22%3A%7B%22year%22%3A%222023%22%7D%7D%5D%7D%7D%2C%7B%22bool%22%3A%7B%22should%22%3A%5B%7B%22term%22%3A%7B%22scStatus%22%3A%22Final%22%7D%7D%5D%7D%7D%5D%7D%7D%7D%7D%5D%7D%7D%2C%22display_type%22%3A%22tabular%22%7D
+
+IMPORTANT: Download the 2023 data from the EEA site and save it as data/raw/data_2023.csv
 
   - To run the notebooks locally, place the files in:
   `data/raw/`
 
 ### Approach
 - Preprocessing: cleaning, missing values, encoding categorical features, scaling 
-- Models: [Linear/Ridge/Lasso], [RandomForest], [XGBoost/LightGBM], etc.
-- Evaluation: [RMSE/MAE/R²], cross-validation
+- Models: Linear Regression, Lasso, Random Forest, XGBoost, Neural Network (Keras).
+- Evaluation: RMSE, MAE and R², with cross-validation.
 
 ### Results (Test Set)
 | Model | R² | RMSE (g/km) |
 |------|---:|------------:|
-| Baseline (mean prediction) | 0.00 | 44.42 | Baseline: predicts the training-set mean for every car.
-| Linear Regression | 0.82 | 19.32 |
-| Random Forest Regressor | 0.94 | 11.33 |
-| XGBoost Regressor (best) | 0.93 | 12.04 |
+| Baseline (mean prediction) | 0.00 | 44.42 | 
+| Linear Regression | 0.81 | 19.32 |
+| **Random Forest Regressor (best)** | **0.94** | **11.33** |
+| XGBoost Regressor | 0.93 | 12.04 |
+| Neural network (Keras) | 0.88 | 15.68 |
+
+*Baseline: predicts the training-set mean for every car.*
 
 ### Repository structure
 
