@@ -1,22 +1,23 @@
-# Datos y visualización
+# Data and visualization
 numpy==2.2.6
 pandas==2.3.0
 scipy==1.15.3
 matplotlib==3.10.3
 seaborn==0.13.2
 pycountry==24.6.1
+pillow==11.2.1
 
-# Estadística y ML clásico
+# Statistics and classical ML
 statsmodels==0.14.4
 scikit-learn==1.7.0
 xgboost==3.0.4
 joblib==1.5.1
 
-# Deep Learning
+# Deep learning
 tensorflow==2.20.0
 
-# Interpretabilidad
+# Interpretability
 shap==0.48.0
 
-# Demo
+# Demo app
 streamlit==1.48.1
